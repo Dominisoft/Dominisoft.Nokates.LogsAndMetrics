@@ -1,3 +1,4 @@
+using Dominisoft.Nokates.Common.Infrastructure.Configuration;
 using Dominisoft.Nokates.Common.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,13 @@ namespace Dominisoft.Nokates.LogsAndMetrics
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNokates();
+
+            int.TryParse(ConfigurationValues.Values["PollInterval"], out var pollInterval);
+            var username = ConfigurationValues.Values["ServiceAccountUsername"];
+            var password= ConfigurationValues.Values["ServiceAccountPassword"];
+            var rootUrl= ConfigurationValues.Values["RootUrl"];
+            var poll = new ServiceStatusPoller(pollInterval, username, password, rootUrl);
+            services.AddSingleton(poll);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
