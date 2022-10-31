@@ -4,8 +4,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
 using Dominisoft.Nokates.Common.Infrastructure.Configuration;
+using Dominisoft.Nokates.Common.Infrastructure.Controllers;
+using Dominisoft.Nokates.Common.Infrastructure.Repositories;
 using Dominisoft.Nokates.Common.Models;
 using Dominisoft.Nokates.LogsAndMetrics.Models;
+using Dominisoft.Nokates.LogsAndMetrics.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
@@ -18,74 +21,24 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
         private static string spGetMetricsByRequest = "spGetMetricsByRequest";
         private static string spGetEndpointMetricsByService = "spGetEndpointMetricsByService";
 
-        public MetricsController()
+        private readonly IMetricsRepository _metricsRepository;
+
+        public MetricsController(IMetricsRepository metricsRepository) 
         {
+            _metricsRepository = metricsRepository;
         }
-        [HttpGet("{ServiceName}")]
-        public virtual List<RequestMetricSummary> GetMetrics(string ServiceName)
-        {
-            var metrics = new List<RequestMetricSummary>();
-            using (var connection = new SqlConnection(ConfigurationValues.Values["MetricsConnectionString"]))
-                metrics = connection.Query<RequestMetricSummary>(spGetMetricsByService, new { ServiceName }, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
-
-
-            for (int i = 0; i < 168; i++)
-            {
-
-                if (!metrics.Any(m => m.Index == i))
-                    metrics.Add(new RequestMetricSummary
-                    {
-                        Index = i,
-                        AverageResponseTime = 0,
-                        Errors = 0,
-                        RequestCount = 0,
-                        Name = ServiceName
-                    });
-            }
-
-
-            return metrics.OrderBy(m => m.Index).ToList();
-        }
+        [HttpGet("{serviceName}")]
+        public virtual List<RequestMetricSummary> GetMetrics(string serviceName)
+        => _metricsRepository.GetAllMatchingFilter(new { ServiceName = serviceName,RequestStart  }).CalculateRequestMetricSummaryByService();
 
 
         [HttpGet("request/{requestId}")]
         public virtual List<RequestMetric> GetMetricsByRequestId(Guid requestId)
-        {
-            var metrics = new List<RequestMetric>();
-            using (var connection = new SqlConnection(ConfigurationValues.Values["MetricsConnectionString"]))
-                metrics = connection.Query<RequestMetric>(spGetMetricsByRequest, new { requestId }, commandType: System.Data.CommandType.StoredProcedure).ToList();
-
-            return metrics;
-
-        }
-
-        [HttpGet("{ServiceName}/endpoints")]
-        public virtual List<RequestMetricSummary> GetEndpointMetrics(string ServiceName)
-        {
-            List<RequestMetricSummary> metrics;
-            using (var connection = new SqlConnection(ConfigurationValues.Values["MetricsConnectionString"]))
-                metrics = connection.Query<RequestMetricSummary>(spGetEndpointMetricsByService, new { ServiceName }, commandType: System.Data.CommandType.StoredProcedure).ToList();
-            var allEndpoints = metrics.Select(m => m.Name).ToList();
-            var endpoints = allEndpoints.Distinct();
-            foreach(var endpoint in endpoints)
-            for (var i = 0; i < 168; i++)
-            {
-
-                if (!metrics.Any(m => m.Index == i && m.Name == endpoint))
-                    metrics.Add(new RequestMetricSummary
-                    {
-                        Index = i,
-                        AverageResponseTime = 0,
-                        Errors = 0,
-                        RequestCount = 0,
-                        Name = endpoint
-                    });
-            }
-
-
-            return metrics.OrderBy(m => m.Name).ThenBy(m => m.Index).ToList();
-        }
+         => _metricsRepository.GetAllMatchingFilter(new { RequestId = requestId });
+        [HttpGet("{serviceName}/endpoints")]
+        public virtual List<RequestMetricSummary> GetEndpointMetrics(string serviceName)
+            => _metricsRepository.GetAllMatchingFilter(new { ServiceName = serviceName }).CalculateRequestMetricSummaryByEndpoint();
 
 
     }
