@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominisoft.Nokates.LogsAndM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominisoft.Nokates.LogsAndMetrics.Tests", "Dominisoft.Nokates.LogsAndMetrics.Tests\Dominisoft.Nokates.LogsAndMetrics.Tests.csproj", "{FACDDAA2-86B3-415B-B33A-F96B280E7774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominisoft.Nokates.LogsAndMetrics.Client", "Dominisoft.Nokates.LogsAndMetrics.Client\Dominisoft.Nokates.LogsAndMetrics.Client.csproj", "{C4E30F5A-BB7A-49E7-B742-2D38CE367B84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominisoft.Nokates.LogsAndMetrics.Common", "Dominisoft.Nokates.LogsAndMetrics.Common\Dominisoft.Nokates.LogsAndMetrics.Common.csproj", "{C4E30F5A-BB7A-49E7-B742-2D38CE367B84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

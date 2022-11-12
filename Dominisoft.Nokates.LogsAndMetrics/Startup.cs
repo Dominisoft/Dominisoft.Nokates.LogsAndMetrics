@@ -1,5 +1,9 @@
 using Dominisoft.Nokates.Common.Infrastructure.Configuration;
 using Dominisoft.Nokates.Common.Infrastructure.Extensions;
+using Dominisoft.Nokates.Common.Infrastructure.Repositories;
+using Dominisoft.Nokates.Common.Infrastructure.RepositoryConnections;
+using Dominisoft.Nokates.Common.Models;
+using Dominisoft.Nokates.LogsAndMetrics.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +24,10 @@ namespace Dominisoft.Nokates.LogsAndMetrics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddNokates();
+            services.AddNokates()
+                .AddScoped<IConnectionString,DefaultConnectionString>()
+                .AddScoped<IMetricsManagementService,MetricsManagementService>()
+                .AddTransient<ISqlRepository<Models.RequestMetric>>(s => s.GetService<IMetricsManagementService>());
 
             int.TryParse(ConfigurationValues.Values["PollInterval"], out var pollInterval);
             var username = ConfigurationValues.Values["ServiceAccountUsername"];
