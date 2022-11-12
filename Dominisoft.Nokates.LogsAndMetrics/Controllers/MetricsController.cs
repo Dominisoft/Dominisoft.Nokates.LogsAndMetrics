@@ -41,5 +41,8 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
         public List<RequestMetric> SearchRequestMetrics([FromBody] object searchParameters)
             => _metricsManagementService.SearchRequestMetrics(searchParameters);
 
+        [HttpGet("Errors")]
+        public List<RequestMetric> GetRecentErrors()
+            => _metricsManagementService.GetRecentErrors();
     }
 }

@@ -9,10 +9,11 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Client
     public interface IMetricsClient
     {
 
-        RestResponse<List<RequestMetricDto>> SearchRequestMetrics(Dictionary<string,string> searchParameters,string token);
-        RestResponse<List<RequestMetricSummaryDto>> GetEndpointMetricsSummaryByServiceName(string serviceName,string token);
-        RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName,string token);
-        RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId, string token);
+        RestResponse<List<RequestMetricDto>> SearchRequestMetrics(Dictionary<string,string> searchParameters);
+        RestResponse<List<RequestMetricSummaryDto>> GetEndpointMetricsSummaryByServiceName(string serviceName);
+        RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName);
+        RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId);
+        RestResponse<List<RequestMetric>> GetRecentErrors();
     }
     public class MetricsClient: IMetricsClient
     {
@@ -23,21 +24,28 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Client
             _serviceRootUri = serviceRootUri;
             HttpHelper.SetToken(authToken);
         }
+        public MetricsClient(string serviceRootUri)
+        {
+            _serviceRootUri = serviceRootUri;
+        }
 
 
-        public RestResponse<List<RequestMetricDto>> SearchRequestMetrics(Dictionary<string, string> searchParameters, string token)
+        public RestResponse<List<RequestMetricDto>> SearchRequestMetrics(Dictionary<string, string> searchParameters)
             => HttpHelper.Post<List<RequestMetricDto>>($"{_serviceRootUri}/Search",searchParameters);
 
-        public RestResponse<List<RequestMetricSummaryDto>> GetEndpointMetricsSummaryByServiceName(string serviceName, string token)
+        public RestResponse<List<RequestMetricSummaryDto>> GetEndpointMetricsSummaryByServiceName(string serviceName)
             => HttpHelper.Get<List<RequestMetricSummaryDto>>($"{_serviceRootUri}/{serviceName}");
 
 
-        public RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName, string token)
+        public RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName)
             => HttpHelper.Get<List<RequestMetricSummaryDto>>($"{_serviceRootUri}/{serviceName}");
 
 
-        public RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId, string token)
+        public RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId)
             => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/request/{requestId}");
+
+        public RestResponse<List<RequestMetric>> GetRecentErrors()
+            => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Errors");
 
     }
 }

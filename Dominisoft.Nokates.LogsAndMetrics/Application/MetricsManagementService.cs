@@ -18,11 +18,13 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
         List<RequestMetric> GetMetricsByRequestId(Guid requestId);
         List<RequestMetric> SearchRequestMetrics(object searchParameters);
         List<RequestMetricSummary> GetEndpointMetricsSummaryByServiceName(string serviceName);
+        List<RequestMetric> GetRecentErrors();
     }
     public class MetricsManagementService : SqlRepository<RequestMetric>, IMetricsManagementService
     {
         private static string spGetMetricsByService = "spGetMetricsByService";
         private static string spGetEndpointMetricsByService = "spGetEndpointMetricsByService";
+        private static string spGetRecentErrorMetrics = "spGetRecentErrorMetrics";
 
         private string _connectionString;
         public MetricsManagementService(string connectionString) : base(connectionString)
@@ -95,5 +97,10 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
             return metrics.OrderBy(m => m.Name).ThenBy(m => m.Index).ToList();
         }
 
+        public List<RequestMetric> GetRecentErrors()
+        {
+            using var connection = new SqlConnection(_connectionString);
+            return connection.Query<RequestMetric>(spGetRecentErrorMetrics, commandType: System.Data.CommandType.StoredProcedure).ToList();
+        }
     }
 }
