@@ -1,19 +1,19 @@
 ﻿using System;
 using Dominisoft.Nokates.Common.Infrastructure.Client;
 using Dominisoft.Nokates.Common.Models;
-using LogEntry = Dominisoft.Nokates.LogsAndMetrics.Client.Models.LogEntry;
+using LogEntryDto = Dominisoft.Nokates.LogsAndMetrics.Client.DataTransfer.LogEntryDto;
 
 namespace Dominisoft.Nokates.LogsAndMetrics.Client
 {
-    public interface ILogEntryClient:IBaseClient<LogEntry>
+    public interface ILogEntryClient:IBaseClient<LogEntryDto>
     {
 
     }
-    public class LogEntryClient:BaseClient<LogEntry>, ILogEntryClient
+    public class LogEntryClient:BaseClient<LogEntryDto>, ILogEntryClient
     {
-        public new LogEntry Update(LogEntry entry)
+        public new LogEntryDto Update(LogEntryDto entry)
             => throw new Exception("Not Allowed");
-        public new bool Delete(LogEntry entry)
+        public new bool Delete(LogEntryDto entry)
             => throw new Exception("Not Allowed");
     }
 }

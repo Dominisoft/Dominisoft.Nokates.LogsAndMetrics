@@ -1,7 +1,7 @@
 ﻿using System;
 using Dominisoft.Nokates.Common.Models;
 
-namespace Dominisoft.Nokates.LogsAndMetrics.Client.Models
+namespace Dominisoft.Nokates.LogsAndMetrics.Models
 {
     public class RequestMetric:Entity
     {
