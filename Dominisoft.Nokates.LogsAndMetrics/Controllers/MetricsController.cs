@@ -21,6 +21,7 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
         public MetricsController()
         {
         }
+        
         [HttpGet("{ServiceName}")]
         public virtual List<RequestMetricSummary> GetMetrics(string ServiceName)
         {
