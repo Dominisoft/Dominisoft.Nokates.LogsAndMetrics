@@ -19,6 +19,7 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Common
         RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName, string token);
         RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId, string token);
         RestResponse<List<RequestMetric>> GetRecentErrors(string token);
+        RestResponse<List<RequestMetric>> GetOverview();
     }
     public class MetricsClient: IMetricsClient
     {
@@ -68,6 +69,10 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Common
 
         public RestResponse<List<RequestMetric>> GetRecentErrors(string token)
             => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Metrics/Errors",token);
+
+        public RestResponse<List<RequestMetric>> GetOverview()
+            => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Overview");
+
 
     }
 }

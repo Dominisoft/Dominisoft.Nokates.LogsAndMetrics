@@ -4,11 +4,11 @@ using LogEntryDto = Dominisoft.Nokates.LogsAndMetrics.Common.DataTransfer.LogEnt
 
 namespace Dominisoft.Nokates.LogsAndMetrics.Common
 {
-    public interface ILogEntryClient:IBaseClient<LogEntryDto>
+    public interface ILogEntryClient:IBaseClient<DataTransfer.LogEntryDto>
     {
 
     }
-    public class LogEntryClient:BaseClient<LogEntryDto>, ILogEntryClient
+    public class LogEntryClient:BaseClient<DataTransfer.LogEntryDto>, ILogEntryClient
     {
         public LogEntryClient(string baseUrl)
         {
