@@ -44,5 +44,9 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
         [HttpGet("Errors")]
         public List<RequestMetric> GetRecentErrors()
             => _metricsManagementService.GetRecentErrors();
+        [HttpGet("Overview")]
+        public List<RequestMetric> GetOverview()
+            => _metricsManagementService.GetOverview();
+
     }
 }

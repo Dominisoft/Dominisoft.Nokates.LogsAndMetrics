@@ -19,14 +19,16 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
         List<RequestMetric> SearchRequestMetrics(object searchParameters);
         List<RequestMetricSummary> GetEndpointMetricsSummaryByServiceName(string serviceName);
         List<RequestMetric> GetRecentErrors();
+        List<RequestMetric> GetOverview();
     }
     public class MetricsManagementService : SqlRepository<RequestMetric>, IMetricsManagementService
     {
-        private static string spGetMetricsByService = "spGetMetricsByService";
-        private static string spGetEndpointMetricsByService = "spGetEndpointMetricsByService";
-        private static string spGetRecentErrorMetrics = "spGetRecentErrorMetrics";
+        private const string spGetMetricsByService = "spGetMetricsByService";
+        private const string spGetEndpointMetricsByService = "spGetEndpointMetricsByService";
+        private const string spGetRecentErrorMetrics = "spGetRecentErrorMetrics";
+        private const string spGetOverview = "spGetOverview";
 
-        private string _connectionString;
+        private readonly string _connectionString;
         public MetricsManagementService(string connectionString) : base(connectionString)
         {
             _connectionString = connectionString;
@@ -62,9 +64,9 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
             return metrics.OrderBy(m => m.Index).ToList();
         }
 
-        public List<RequestMetric> GetMetricsByRequestId(Guid requestId)
+        public List<RequestMetric> GetMetricsByRequestId(Guid requestTrackingId)
         {
-            var metrics = GetAllMatchingFilter(new {RequestId = requestId});
+            var metrics = GetAllMatchingFilter(new {RequestTrackingId = requestTrackingId });
             return metrics;
         }
 
@@ -101,6 +103,12 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
         {
             using var connection = new SqlConnection(_connectionString);
             return connection.Query<RequestMetric>(spGetRecentErrorMetrics, commandType: System.Data.CommandType.StoredProcedure).ToList();
+        }
+
+        public List<RequestMetric> GetOverview()
+        {
+            using var connection = new SqlConnection(_connectionString);
+            return connection.Query<RequestMetric>(spGetOverview, commandType: System.Data.CommandType.StoredProcedure).ToList();
         }
     }
 }

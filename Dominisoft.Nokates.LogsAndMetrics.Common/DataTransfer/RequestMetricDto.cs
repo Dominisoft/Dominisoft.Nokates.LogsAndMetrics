@@ -1,7 +1,7 @@
 ﻿using System;
 using Dominisoft.Nokates.Common.Models;
 
-namespace Dominisoft.Nokates.LogsAndMetrics.Client.DataTransfer
+namespace Dominisoft.Nokates.LogsAndMetrics.Common.DataTransfer
 {
     public class RequestMetricDto:Entity
     {
