@@ -21,7 +21,7 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Controllers
 
         public MetricsController(IMetricsManagementService metricsManagementService)
         {
-            this._metricsManagementService = metricsManagementService;
+            _metricsManagementService = metricsManagementService;
         }
 
         [HttpGet("{serviceName}")]

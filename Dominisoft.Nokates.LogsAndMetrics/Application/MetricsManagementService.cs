@@ -67,6 +67,7 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Application
         public List<RequestMetric> GetMetricsByRequestId(Guid requestTrackingId)
         {
             var metrics = GetAllMatchingFilter(new {RequestTrackingId = requestTrackingId });
+
             return metrics;
         }
 
