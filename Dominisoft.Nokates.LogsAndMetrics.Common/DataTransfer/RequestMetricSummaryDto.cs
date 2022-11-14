@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Dominisoft.Nokates.LogsAndMetrics.Client.DataTransfer
+namespace Dominisoft.Nokates.LogsAndMetrics.Common.DataTransfer
 {
     public class RequestMetricSummaryDto
     {

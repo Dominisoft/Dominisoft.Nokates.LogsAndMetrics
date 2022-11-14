@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Dominisoft.Nokates.Common.Infrastructure.Helpers;
 using Dominisoft.Nokates.Common.Models;
-using Dominisoft.Nokates.LogsAndMetrics.Client.DataTransfer;
+using Dominisoft.Nokates.LogsAndMetrics.Common.DataTransfer;
 
-namespace Dominisoft.Nokates.LogsAndMetrics.Client
+namespace Dominisoft.Nokates.LogsAndMetrics.Common
 {
     public interface IMetricsClient
     {
@@ -14,6 +14,7 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Client
         RestResponse<List<RequestMetricSummaryDto>> GetMetricSummaryByServiceName(string serviceName);
         RestResponse<List<RequestMetric>> GetMetricsByRequestId(Guid requestId);
         RestResponse<List<RequestMetric>> GetRecentErrors();
+        RestResponse<List<RequestMetric>> GetOverview();
     }
     public class MetricsClient: IMetricsClient
     {
@@ -45,7 +46,9 @@ namespace Dominisoft.Nokates.LogsAndMetrics.Client
             => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/request/{requestId}");
 
         public RestResponse<List<RequestMetric>> GetRecentErrors()
-            => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Errors");
+            => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Errors"); 
+        public RestResponse<List<RequestMetric>> GetOverview()
+            => HttpHelper.Get<List<RequestMetric>>($"{_serviceRootUri}/Overview");
 
     }
 }
